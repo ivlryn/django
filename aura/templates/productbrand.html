@@ -1,0 +1,33 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<div class="container my-5">
+  <h1 class="mb-4">{{ brand.brandName }}</h1>
+
+  <div class="row g-4">
+    {% for p in products %}
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="card h-100 shadow-sm">
+
+          <!-- image -->
+          {% if p.productImage %}
+            <img src="{{ p.productImage.url }}" class="card-img-top" alt="{{ p.productName }}">
+          {% else %}
+            <img src="https://via.placeholder.com/300x400?text=No+image" class="card-img-top" alt="No image">
+          {% endif %}
+
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ p.productName }}</h5>
+            <div class="mt-auto">
+              <a href="{% url 'product_detail' p.id %}" class="btn btn-sm btn-outline-dark">View</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-muted">No products found for this brand.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

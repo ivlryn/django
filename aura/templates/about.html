@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Luxé Beauty</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+    
+</head>
+<body class="bg-light">
+
+    <!-- Loading Spinner -->
+    <div id="loader" class="loader-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    {% include 'navbar.html' %}
+
+    <!-- Hero Section -->
+    <section class="hero py-5" style="background: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), ; background-size: cover; background-position: center;">
+        <div class="container py-5">
+            <div class="row align-items-center min-vh-75">
+                <div class="col-lg-6 text-center text-lg-start">
+                    <h1 class="display-4 fw-light mb-4" style="font-family: 'Playfair Display', serif;">About Luxé Beauty</h1>
+                    <p class="lead text-muted mb-4">Timeless elegance meets modern science in premium skincare crafted for radiant, healthy skin.</p>
+                    <p class="fs-5 text-secondary">We believe true beauty comes from nurturing your skin with the finest natural ingredients and cutting-edge formulations.</p>
+                </div>
+                <div class="col-lg-6 text-center mt-5 mt-lg-0">
+                    <img src="https://www.shutterstock.com/image-photo/young-beautiful-woman-applying-face-260nw-2586014979.jpg" alt="Woman applying Luxé Beauty serum" class="img-fluid rounded shadow-lg" style="max-width: 80%;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Story -->
+    <section class="py-5 bg-white">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <img src="https://thumbs.dreamstime.com/b/flat-lay-botanical-skincare-products-flat-lay-featuring-botanical-skincare-products-green-leaves-yellow-flowers-soft-391890674.jpg" alt="Natural botanical ingredients" class="img-fluid rounded shadow" style="max-height: 500px; object-fit: cover;">
+                </div>
+                <div class="col-lg-6 mt-5 mt-lg-0 ps-lg-5">
+                    <h2 class="h1 fw-light mb-4" style="font-family: 'Playfair Display', serif;">Our Story</h2>
+                    <p class="text-muted lead">Founded in 2020, Luxé Beauty was born from a passion for clean, effective skincare that delivers visible results without compromise.</p>
+                    <p class="text-secondary fs-5">Our journey began with a simple mission: to create luxurious products using only the highest-quality, ethically sourced ingredients. We combine time-honored botanical extracts with innovative dermatological science to craft formulas that nourish, protect, and transform your skin.</p>
+                    <p class="text-secondary fs-5">Every product is meticulously developed, cruelty-free, and free from harmful chemicals — because your skin deserves nothing less than pure luxury.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy & Values -->
+    <section class="py-5 bg-light">
+        <div class="container py-5">
+            <div class="row text-center mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="h1 fw-light mb-4" style="font-family: 'Playfair Display', serif;">Our Philosophy</h2>
+                    <p class="lead text-muted">Beauty is more than skin deep. It's about confidence, self-care, and embracing your natural radiance.</p>
+                </div>
+            </div>
+            <div class="row g-5">
+                <div class="col-md-4 text-center">
+                    <div class="hover-shadow p-4 rounded bg-white shadow-sm transition">
+                        <i class="fas fa-leaf fa-3x text-success mb-4"></i>
+                        <h5 class="fw-semibold">Clean & Natural</h5>
+                        <p class="text-secondary">Premium botanical ingredients, sustainably sourced and free from parabens, sulfates, and synthetic fragrances.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="hover-shadow p-4 rounded bg-white shadow-sm transition">
+                        <i class="fas fa-vial fa-3x text-primary mb-4"></i>
+                        <h5 class="fw-semibold">Science-Backed</h5>
+                        <p class="text-secondary">Formulas developed with dermatologists and backed by clinical research for proven efficacy.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="hover-shadow p-4 rounded bg-white shadow-sm transition">
+                        <i class="fas fa-heart fa-3x text-danger mb-4"></i>
+                        <h5 class="fw-semibold">Cruelty-Free & Ethical</h5>
+                        <p class="text-secondary">Never tested on animals. We prioritize kindness in every step of our process.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery / Product Showcase -->
+    <section class="py-5 bg-white">
+        <div class="container py-5">
+            <div class="row text-center mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="h1 fw-light mb-4" style="font-family: 'Playfair Display', serif;">Crafted with Care</h2>
+                    <p class="lead text-muted">A glimpse into the elegance and purity behind every Luxé Beauty product.</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <img src="https://static.vecteezy.com/system/resources/previews/071/051/577/large_2x/elegant-marble-pedestals-displaying-luxury-skincare-products-under-soft-pink-lighting-photo.jpg" alt="Luxury skincare display" class="img-fluid rounded shadow hover-shadow transition" style="height: 300px; object-fit: cover;">
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <img src="https://thumbs.dreamstime.com/b/beauty-skincare-product-mockup-cosmetic-cream-lotion-serum-package-marble-background-luxury-elegant-minimal-spa-display-featuring-412939399.jpg" alt="Premium cream and serum" class="img-fluid rounded shadow hover-shadow transition" style="height: 300px; object-fit: cover;">
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <img src="https://static.vecteezy.com/system/resources/previews/046/451/067/large_2x/natural-skincare-products-in-jars-surrounded-by-fresh-herbs-and-flowers-showcasing-organic-beauty-treatment-items-in-a-flat-lay-arrangement-photo.jpg" alt="Organic beauty ingredients" class="img-fluid rounded shadow hover-shadow transition" style="height: 300px; object-fit: cover;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team / Founder -->
+    <section class="py-5 bg-light">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6 order-lg-2">
+                    <img src="https://assets.vogue.com/photos/65cbe1da6bd6de6ca780c71e/4:3/w_1440,h_1080,c_limit/00-promo%20(46).jpg" alt="Our Founder" class="img-fluid rounded shadow" style="max-height: 500px; object-fit: cover;">
+                </div>
+                <div class="col-lg-6 order-lg-1 pe-lg-5">
+                    <h2 class="h1 fw-light mb-4" style="font-family: 'Playfair Display', serif;">Meet Our Vision</h2>
+                    <p class="text-secondary fs-5">Inspired by timeless beauty rituals and modern innovation, our founder brings decades of expertise in formulation and luxury skincare to every product we create.</p>
+                    <p class="text-secondary fs-5">"I wanted to build a brand that celebrates real results and real luxury — where science and nature work in perfect harmony."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Loader hide script -->
+    <script>
+        window.addEventListener('load', function() {
+            document.getElementById('loader').classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

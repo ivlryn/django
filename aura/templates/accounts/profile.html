@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - Aura</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .tab-active {
+            @apply bg-gray-900 text-white font-medium;
+        }
+        .tab-inactive {
+            @apply text-gray-700 hover:bg-gray-100;
+        }
+    </style>
+</head>
+{% include 'navbar.html' %}
+
+<div class="container my-5 py-5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">My Account</h1>
+        <p class="text-gray-600 mb-10">Manage your profile and view your orders</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+
+            <!-- Sidebar -->
+            <div class="md:col-span-1">
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden sticky top-24">
+                    <nav class="p-6 space-y-2">
+                        <a href="?tab=profile"
+                           class="block py-4 px-6 text-lg rounded-xl transition {% if request.GET.tab != 'orders' %}bg-gray-900 text-white font-medium{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+                            Profile
+                        </a>
+                        <a href="?tab=orders"
+                           class="block py-4 px-6 text-lg rounded-xl transition {% if request.GET.tab == 'orders' %}bg-gray-900 text-white font-medium{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+                            Orders
+                        </a>
+                        <hr class="my-6 border-gray-200">
+                        {# ----------  Log-out that matches Luxé  ---------- #}
+<form method="post" action="{% url 'logout' %}" class="block">
+  {% csrf_token %}
+  <button type="submit"
+          class="w-full text-left py-4 px-6 text-lg text-red-600 hover:bg-red-50 rounded-xl transition">
+    <i class="fas fa-sign-out-alt mr-2"></i> Log Out
+  </button>
+</form>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="md:col-span-3">
+
+                <!-- Profile Tab -->
+                {% if request.GET.tab != 'orders' %}
+                <div class="bg-white rounded-2xl shadow-sm p-10">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-8">Personal Information</h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 mb-1">Full Name</p>
+                            <p class="text-lg text-gray-900">{{ user.get_full_name|default:"Not set" }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 mb-1">Email Address</p>
+                            <p class="text-lg text-gray-900">{{ user.email }}</p>
+                        </div>
+
+                        {% if user.addresses.exists %}
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 mb-1">Phone</p>
+                            <p class="text-lg text-gray-900">{{ user.addresses.first.phone }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-600 mb-1">Delivery Address</p>
+                            <p class="text-lg text-gray-900">{{ user.addresses.first.address|truncatechars:70 }}</p>
+                        </div>
+                        {% else %}
+                        <div class="col-span-2 text-gray-500 italic">
+                            No shipping address saved yet.
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Orders Tab -->
+                {% if request.GET.tab == 'orders' or not request.GET.tab %}
+                <div class="bg-white rounded-2xl shadow-sm p-10">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-8">Order History</h2>
+
+                    {% if orders %}
+                        {% for order in orders %}
+                        <div class="border border-gray-200 rounded-2xl p-8 mb-8 hover:shadow-lg transition">
+                            <div class="flex justify-between items-start mb-6">
+                                <div>
+                                    <p class="text-sm text-gray-500">Order #ORD-{{ order.id|stringformat:"07d" }}</p>
+                                    <p class="text-gray-700 font-medium">{{ order.created_at|date:"F d, Y" }}</p>
+                                </div>
+                                <span class="bg-green-100 text-green-800 px-5 py-2 rounded-full text-sm font-semibold">
+                                    Completed
+                                </span>
+                            </div>
+
+                            <div class="space-y-6">
+                                {% for item in order.items.all %}
+                                <div class="flex items-center gap-6">
+                                    {% if item.product.productImage %}
+                                        <img src="{{ item.product.productImage.url }}" 
+                                             alt="{{ item.product.productName }}"
+                                             class="w-20 h-20 object-cover rounded-xl shadow-sm">
+                                    {% else %}
+                                        <div class="bg-gray-200 border-2 border-dashed rounded-xl w-20 h-20"></div>
+                                    {% endif %}
+
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold text-gray-900">{{ item.product.productName }}</h4>
+                                        <p class="text-sm text-gray-600">Quantity: {{ item.quantity }}</p>
+                                    </div>
+                                    <p class="font-bold text-lg">${{ item.price|floatformat:2 }}</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="border-t-2 border-gray-200 mt-8 pt-6">
+                                <div class="flex justify-between text-lg mb-4">
+                                    <span class="text-gray-600">Subtotal</span>
+                                    <span>${{ order.total_price|floatformat:2 }}</span>
+                                </div>
+                                <div class="flex justify-between text-lg">
+                                    <span class="text-gray-600">Delivery Fee</span>
+                                    <span>${{ order.delivery_fee|floatformat:2 }}</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 flex justify-between items-center">
+                                <span class="text-xl text-gray-700">Total Paid</span>
+                                <span class="text-3xl font-bold text-gray-900">
+                                    ${{ order.total_price|add:order.delivery_fee|floatformat:2 }}
+                                </span>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-16">
+                            <p class="text-xl text-gray-500 mb-6">No orders yet.</p>
+                            <a href="{% url 'home' %}" class="bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800">
+                                Start Shopping
+                            </a>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-16">
+                            <p class="text-xl text-gray-500 mb-6">You haven't placed any orders yet.</p>
+                            <a href="{% url 'home' %}" class="bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800">
+                                Start Shopping
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}
+</html>

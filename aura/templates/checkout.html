@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Luxé Beauty</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    <style>
+        .btn-start-shopping {
+            background: #2c3e50;
+            color: white;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .btn-start-shopping:hover {
+            background: #1a2530d0;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(44,62,80,0.2);
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    {% include 'navbar.html' %}
+
+    <div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="row g-4">
+
+                <!-- Delivery Information -->
+                <div class="col-lg-6">
+                    <div class="p-4 rounded shadow-sm bg-white">
+                        <h4 class="mb-4 fw-bold">Delivery Information</h4>
+
+                        <form method="POST">
+                            {% csrf_token %}
+
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="full_name" class="form-control mb-3" required>
+
+                            <label class="form-label">Phone / Telegram</label>
+                            <input type="text" name="phone" class="form-control mb-3"
+                                   placeholder="+971 50 123 4567 or @yourusername" required>
+
+                            <label class="form-label">Delivery Address</label>
+                            <textarea name="address" rows="3" class="form-control mb-3"
+                                      placeholder="Building, apartment, floor, near landmark..." required></textarea>
+
+                            <label class="form-label">Address Link (Optional)</label>
+                            <input type="text" name="address_link"
+                                   class="form-control mb-1"
+                                   placeholder="Google Maps, What3Words, etc.">
+
+                            <small class="text-muted">Helps our courier find you faster</small>
+
+                            <button type="submit"
+                                    class="btn btn-dark w-100 mt-4 py-2 fw-bold">
+                                Place Order – ${{ cart.get_total_price|add:2|floatformat:2 }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <!-- Order Summary (Product Name Only – Enhanced Design) -->
+<div class="col-lg-6">
+    <div class="p-4 rounded shadow-sm bg-white">
+        <h4 class="mb-4 fw-bold" style="font-family: 'Playfair Display', serif; color: #2c3e50;">
+            Order Summary
+        </h4>
+
+        <div class="border-bottom pb-3 mb-4">
+            {% for item in cart %}
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="flex-grow-1 me-3">
+                        <div class="fw-600 text-dark" style="font-size: 1.02rem;">
+                            {{ item.quantity }} × {{ item.product.productName }}
+                        </div>
+                        <small class="text-muted">
+                            ${{ item.price|floatformat:2 }} each
+                        </small>
+                    </div>
+                    <div class="fw-bold text-dark text-end">
+                        ${{ item.total_price|floatformat:2 }}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Subtotal -->
+        <div class="d-flex justify-content-between mb-2 text-muted">
+            <span>Subtotal</span>
+            <span>${{ cart.get_total_price|floatformat:2 }}</span>
+        </div>
+
+        <!-- Delivery -->
+        <div class="d-flex justify-content-between mb-3 text-muted">
+            <span>Delivery</span>
+            <span>$2.00</span>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Grand Total -->
+        <div class="d-flex justify-content-between align-items-center">
+            <strong class="fs-5" style="font-family: 'Playfair Display', serif;">Total</strong>
+            <strong class="fs-4 text-primary fw-bold">
+                ${{ cart.get_total_price|add:2|floatformat:2 }}
+            </strong>
+        </div>
+
+        <!-- Optional: Trust badge / note -->
+        <div class="text-center mt-4 pt-3 border-top">
+            <small class="text-muted"   >
+                <i class="fas fa-shield-alt text-success me-1"></i>
+                Secure Checkout • Cash on Delivery • Fast Delivery in Phnom Penh
+            </small>
+        </div>
+    </div>
+</div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    {% include 'footer.html' %}
+
+</body>
+</html>

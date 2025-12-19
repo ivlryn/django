@@ -1,0 +1,41 @@
+# Python / Django
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Database
+db.sqlite3
+db.sqlite3-journal
+
+# Static & Media
+/staticfiles/
+/media/
+
+# Logs
+*.log
+
+# Environment variables
+.env
+.local
+
+# VS Code settings (optional, but good to ignore personal configs)
+.vscode/
+
+# Django specific
+local_settings.py
+*.pot
+*.mo
+
+# Migrations - DO NOT ignore these! (keep them for database schema)
+# !migrations/
+
+# Other common
+.DS_Store
+Thumbs.db

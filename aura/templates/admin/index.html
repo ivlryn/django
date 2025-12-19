@@ -1,0 +1,319 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block title %}Luxé Beauty Sales Dashboard | {{ site_title }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+
+<style>
+:root {
+  --font-family: 'Inter', sans-serif;
+  --primary: #6d28d9;
+  --primary-light: #ede9fe;
+  --text: #374151;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --bg-card: #ffffff;
+  --shadow: 0 4px 6px -1px rgba(0,0,0,0.1),
+            0 2px 4px -1px rgba(0,0,0,0.06);
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: #f9fafb;
+  color: var(--text);
+}
+
+.card {
+  border: none;
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow);
+  background: var(--bg-card);
+}
+
+.card-header {
+  background: transparent;
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 1.5rem;
+}
+
+.card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.small-box {
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.small-box .inner {
+  padding: 1.5rem;
+}
+
+.small-box h3 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.small-box p {
+  color: var(--text-muted);
+}
+
+.small-box-footer {
+  display: block;
+  padding: 0.75rem;
+  background: rgba(0,0,0,0.05);
+  font-weight: 500;
+  text-align: center;
+}
+
+table th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+canvas {
+  max-height: 400px;
+}
+
+/* Filter button polish */
+@media (max-width: 768px) {
+  .filter-actions .btn {
+    width: 100%;
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+
+  <!-- Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="fw-bold">Luxé Beauty Sales Dashboard</h1>
+    </div>
+  </div>
+
+  <!-- Date Filter -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title mb-0">Filter by Date Range</h3>
+        </div>
+        <div class="card-body">
+
+          <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-4">
+              <label for="start_date" class="fw-medium">From</label>
+              <input
+                type="date"
+                name="start_date"
+                id="start_date"
+                class="form-control mt-1"
+                value="{{ start_date }}"
+              >
+            </div>
+
+            <div class="col-md-4">
+              <label for="end_date" class="fw-medium">To</label>
+              <input
+                type="date"
+                name="end_date"
+                id="end_date"
+                class="form-control mt-1"
+                value="{{ end_date }}"
+              >
+            </div>
+
+            <div class="col-md-4 d-flex gap-2 filter-actions">
+              <button type="submit" class="btn btn-primary w-100">
+                Apply Filter
+              </button>
+              <a href="{% url 'admin:index' %}" class="btn btn-outline-secondary w-100">
+                Clear
+              </a>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="row mb-5">
+    <div class="col-md-6">
+      <div class="small-box bg-white border" style="border-left:4px solid var(--primary)">
+        <div class="inner">
+          <h3>${{ total_sales|floatformat:2|default:"0.00" }}</h3>
+          <p>Total Sales{% if start_date or end_date %} (Filtered){% endif %}</p>
+        </div>
+        <a href="{% url 'admin:aura_order_changelist' %}" class="small-box-footer">
+          View Orders →
+        </a>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="small-box bg-white border" style="border-left:4px solid #10b981">
+        <div class="inner">
+          <h3>{{ total_orders|default:"0" }}</h3>
+          <p>Total Orders{% if start_date or end_date %} (Filtered){% endif %}</p>
+        </div>
+        <a href="{% url 'admin:aura_order_changelist' %}" class="small-box-footer">
+          View Orders →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="row mb-5">
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Sales Trend (Last 30 Days)</h3>
+        </div>
+        <div class="card-body">
+          <canvas id="salesLine"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Top Categories</h3>
+        </div>
+        <div class="card-body">
+          <canvas id="catDonut"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Orders & Products -->
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Recent Orders</h3>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="bg-light">
+              <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Total</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in recent_orders %}
+              <tr>
+                <td>
+                  <a href="{% url 'admin:aura_order_change' order.id %}">
+                    #{{ order.id }}
+                  </a>
+                </td>
+                <td>{{ order.user.username|default:"Guest" }}</td>
+                <td><strong>${{ order.total_price|floatformat:2 }}</strong></td>
+                <td>{{ order.created_at|date:"M d, Y" }}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="4" class="text-center text-muted py-4">
+                  No orders found
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Top Selling Products</h3>
+        </div>
+        <div class="card-body">
+          {% if top_products %}
+          <ol>
+            {% for item in top_products %}
+            <li class="mb-3">
+              <strong>{{ item.product__productName }}</strong><br>
+              <small class="text-muted">{{ item.total_qty }} units sold</small>
+            </li>
+            {% endfor %}
+          </ol>
+          {% else %}
+          <p class="text-muted">No sales in this range</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+fetch("{% url 'chart_sales_per_day' %}?days=30")
+  .then(r => r.json())
+  .then(json => {
+    new Chart(document.getElementById('salesLine'), {
+      type: 'line',
+      data: {
+        labels: json.labels,
+        datasets: [{
+          data: json.data,
+          borderColor: '#6d28d9',
+          backgroundColor: 'rgba(109,40,217,0.1)',
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  });
+
+fetch("{% url 'chart_top_categories' %}")
+  .then(r => r.json())
+  .then(json => {
+    new Chart(document.getElementById('catDonut'), {
+      type: 'doughnut',
+      data: {
+        labels: json.labels,
+        datasets: [{
+          data: json.data,
+          backgroundColor: [
+            '#6d28d9','#10b981','#f59e0b',
+            '#3b82f6','#ef4444','#8b5cf6'
+          ]
+        }]
+      },
+      options: {
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+  });
+</script>
+
+{{ block.super }}
+{% endblock %}

@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Confirmed | Luxé Beauty</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Poppins:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
+
+    <style>
+      body {
+        background: #f8f9fa;
+        font-family: "Poppins", sans-serif;
+      }
+      .success-container {
+        max-width: 800px;
+        margin: 6rem auto;
+        text-align: center;
+      }
+      .success-check {
+        width: 90px;
+        height: 90px;
+        background: #d4edda;
+        color: #28a745;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        margin: 0 auto 2.5rem;
+      }
+      .success-header h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 3rem;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+      }
+      .success-header p {
+        color: #6c757d;
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto 1.5rem;
+      }
+      @media (max-width: 768px) {
+        .success-header h1 {
+          font-size: 2.4rem;
+        }
+        .success-check {
+          width: 70px;
+          height: 70px;
+          font-size: 2.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {% include 'navbar.html' %}
+
+    <div class="success-container">
+      <div class="success-check">
+        <i class="fas fa-check"></i>
+      </div>
+
+      <div class="success-header">
+        <h1>Thank You for Your Order!</h1>
+        <p>We appreciate your purchase and your trust in Luxé Beauty.</p>
+      </div>
+
+      <div class="mt-5">
+        <a href="{% url 'home' %}" class="btn btn-dark rounded-pill px-5 py-3">Continue Shopping</a>
+        <a href="{% url 'profile' %}?tab=orders" class="btn btn-outline-dark rounded-pill px-5 py-3 ms-3">View Orders</a>
+      </div>
+    </div>
+
+    {% include 'footer.html' %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html> 
