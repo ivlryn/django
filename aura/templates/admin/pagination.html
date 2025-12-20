@@ -1,0 +1,9 @@
+{% load admin_list %}
+
+{% if pagination_required %}
+<ul class="pagination pagination-sm m-0 float-right">
+    {% for i in page_range %}
+        {% paginator_number cl i %}
+    {% endfor %}
+</ul>
+{% endif %}

@@ -29,7 +29,7 @@ from django.utils import timezone
 from datetime import timedelta
 import json
 from django.http import JsonResponse
-
+from django.core.paginator import Paginator
 
 
 
@@ -57,15 +57,20 @@ def product (request) :
 def home(request):
     categories = Category.objects.all()
     brands = Brand.objects.all()
-    products = Product.objects.all()
+    products_qs = Product.objects.all()  # Use a separate variable for the full queryset
 
-    # ADD THIS: Get latest 3 published blog posts
+    # Pagination
+    paginator = Paginator(products_qs, 12)  # 12 products per page (change if needed, e.g., 9, 15, 20)
+    page_number = request.GET.get('page')
+    products = paginator.get_page(page_number)  # This handles invalid pages gracefully
+
+    # Latest 3 published blog posts (unchanged)
     blog_posts = BlogPost.objects.filter(is_published=True).select_related()[:3]
 
     context = {
         'categories': categories,
         'brands': brands,
-        'products': products,
+        'products': products,       # Now a Page object (paginated)
         'blog_posts': blog_posts,   
     }
     return render(request, "home.html", context)
